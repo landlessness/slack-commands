@@ -12,6 +12,13 @@ var lcdOptions = {
   form: { action: 'change' } };
 
 argo()
+.get('^/test$', function(handle) {
+  handle('request', function(env, next) {
+    env.response.statusCode = 200;
+    env.response.body = { status: ['OK'] };
+    next(env);
+  });  
+})
 .post('^/display$', function(handle) {
   handle('request', function(env, next) {
     var fullBody = '';
@@ -46,4 +53,4 @@ argo()
     });
   });
 })
-.listen(1337);
+.listen(process.env.PORT || 5000)
