@@ -42,10 +42,10 @@ argo()
       env.response.statusCode = 200;
       env.response.body = {
         response_type: 'in_channel',
-        text: 'live video: https://video.nest.com/live/zettajs.',
+        text: 'Thanks @' + decodedBody.user_name + ' for using /display.',
         attachments: [
           {
-            text: fullMessage
+            text: 'view message: https://video.nest.com/live/zettajs'
           }
         ]
       };
