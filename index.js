@@ -1,13 +1,12 @@
 var argo = require('argo');
 var querystring = require('querystring');
-var lcd = require('request');
 
-var lcdOptions = { 
-  method: 'POST',
-  url: 'http://zetta-cloud-2.herokuapp.com/servers/Detroit/devices/0d919602-8755-4727-9832-970efc17c63d',
-  headers: { 'content-type': 'application/x-www-form-urlencoded' },
-  form: { action: 'change' }
-};
+var zetta = require('zetta-client')()
+  .connect('https://zetta-cloud-2.herokuapp.com');
+
+var displayQuery = zetta
+  .from('Detroit')
+  .where({ type: 'display' });
 
 argo()
 .post('^/display$', function(handle) {
@@ -20,9 +19,15 @@ argo()
         return;
       }
       env.request.body = querystring.parse(body.toString());
-      lcdOptions.form.message = '"' + env.request.body.text + '" -@' + env.request.body.user_name;
-      lcd(lcdOptions, function (error, response, body) {
-        if (error) throw new Error(error);
+      var displayMessage = '"' + env.request.body.text + '" -@' + env.request.body.user_name;
+      zetta.observe(displayQuery, function(display) {
+        display.call('change', displayMessage, function(err) {
+          if (err) {
+            console.error(err);
+          } else {
+            console.log('success');
+          }
+        });
       });
       // RESPONSE
       env.response.statusCode = 200;
