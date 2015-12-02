@@ -45,7 +45,7 @@ argo()
         text: '@' + decodedBody.user_name + ' posted to /display.',
         attachments: [
           {
-            text: 'View message: https://video.nest.com/live/zettajs'
+            text: 'view: https://video.nest.com/live/zettajs'
           }
         ]
       };
