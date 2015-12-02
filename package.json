@@ -1,0 +1,16 @@
+{
+  "name": "slack-command",
+  "version": "1.0.0",
+  "description": "a server for slack commands",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "Brian Mulloy <brian@landlessness.net> (http://landlessness.net)",
+  "license": "ISC",
+  "dependencies": {
+    "argo": "^1.0.0",
+    "request": "^2.67.0"
+  }
+}
