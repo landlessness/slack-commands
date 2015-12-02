@@ -42,10 +42,10 @@ argo()
       env.response.statusCode = 200;
       env.response.body = {
         response_type: 'in_channel',
-        text: fullMessage,
+        text: 'live video: https://video.nest.com/live/zettajs.',
         attachments: [
           {
-            text:'View: https://video.nest.com/live/zettajs. Thanks for using Zetta.'
+            text: fullMessage
           }
         ]
       };
