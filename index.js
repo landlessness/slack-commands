@@ -45,7 +45,7 @@ argo()
         text: fullMessage,
         attachments: [
           {
-            text:'View the display https://video.nest.com/live/zettajs'
+            text:'View: https://video.nest.com/live/zettajs. Thanks for using Zetta.'
           }
         ]
       };
