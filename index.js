@@ -13,21 +13,23 @@ argo()
 .post('^/display$', function(handle) {
   handle('request', function(env, next) {
     var fullBody = '';
-    env.request.on('data', function(chunk) {
-      fullBody += chunk.toString();
-    });
-    env.request.on('end', function() {
-      var decodedBody = querystring.parse(fullBody);
-      lcdOptions.form.message = '"' + decodedBody.text + '" -@' + decodedBody.user_name;
+    
+    env.request.getBody(function(err, body) {
+      if (err) {
+        env.response.statusCode = 400;
+        next(env);
+        return;
+      }
 
+      env.request.body = querystring.parse(body.toString());
+      lcdOptions.form.message = '"' + env.request.body.text + '" -@' + env.request.body.user_name;
       lcd(lcdOptions, function (error, response, body) {
         if (error) throw new Error(error);
       });
-
       env.response.statusCode = 200;
       env.response.body = {
         response_type: 'in_channel',
-        text: '@' + decodedBody.user_name + ' posted to /display.',
+        text: '@' + env.request.body.user_name + ' posted to /display.',
         attachments: [
           {
             text: 'view: https://video.nest.com/live/zettajs'
