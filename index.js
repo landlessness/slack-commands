@@ -1,5 +1,6 @@
 var argo = require('argo');
 var querystring = require('querystring');
+var request = require('request');
 
 var zetta = require('zetta-client')()
   .connect('https://zetta-cloud-2.herokuapp.com');
@@ -29,10 +30,8 @@ argo()
           }
         });
       });
-      // RESPONSE
-      env.response.statusCode = 200;
-      env.response.body = {
-        response_type: 'in_channel',
+      // Into Slack WebHook Response
+      var webhookResponse = {
         text: '@' + env.request.body.user_name + ' posted to /display.',
         attachments: [
           {
@@ -40,6 +39,18 @@ argo()
           }
         ]
       };
+      console.log('sending inbound webhook...');
+      request.post(
+        env.request.body.response_url,
+        webhookResponse,
+        function (error, response, body) {
+          if (!error && response.statusCode == 200) {
+            console.log(body)
+          }
+        }
+      );
+      // API RESPONSE
+      env.response.statusCode = 200;
       next(env);
     });
   });
