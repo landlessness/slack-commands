@@ -35,28 +35,29 @@ argo()
           } else {
             console.log('successfully sent message');
             // Slack WebHook Response
-            var webhookResponse = {
-              text: '@' + env.request.body.user_name + ' posted to /display.',
-              attachments: [
-                {
-                  text: 'view: https://video.nest.com/live/zettajs'
-                }
-              ]
+            var options = {
+              uri: env.request.body.response_url,
+              method: 'POST',
+              json: {
+                text: '@' + env.request.body.user_name + ' posted to /display.',
+                attachments: [
+                  {
+                    text: 'view: https://video.nest.com/live/zettajs'
+                  }
+                ]
+              }
             };
             console.log('sending inbound webhook to slack response_url: ' + env.request.body.response_url);
-            request.post(
-              env.request.body.response_url,
-              webhookResponse,
-              function (error, response, body) {
-                if (!error && response.statusCode == 200) {
-                  console.log('successfully sent webhook to slack');
-                  console.log(body)
-                } else {
-                  console.error(error)
-                  console.log('failed to send webhook to slack');
-                }
+            request(options, function (error, response, body) {
+              if (!error && response.statusCode == 200) {
+                console.log('successfully sent webhook to slack');
+                console.log(body)
+              } else {
+                console.log('failed to send webhook to slack');
+                console.error('HTTP STATUS CODE: ' + response.statusCode);
+                console.error(error);
               }
-            );
+            });
             // API RESPONSE
             env.response.statusCode = 200;
             next(env);
