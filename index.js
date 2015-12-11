@@ -20,6 +20,7 @@ argo()
         return;
       }
       env.request.body = querystring.parse(body.toString());
+      console.log('incoming request body: %j', env.request.body);
       var displayMessage = '"' + env.request.body.text + '" -@' + env.request.body.user_name;
       console.log('querying for the LCD display...');
       zetta.observe(displayQuery, function(display) {
@@ -42,7 +43,7 @@ argo()
                 }
               ]
             };
-            console.log('sending inbound webhook to slack...');
+            console.log('sending inbound webhook to slack response_url: ' + env.request.body.response_url);
             request.post(
               env.request.body.response_url,
               webhookResponse,
@@ -51,6 +52,7 @@ argo()
                   console.log('successfully sent webhook to slack');
                   console.log(body)
                 } else {
+                  console.error(error)
                   console.log('failed to send webhook to slack');
                 }
               }
